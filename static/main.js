@@ -11,4 +11,29 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!ok) e.preventDefault();
     });
   });
+
+  // Theme handling: three color themes (blue, green, dark)
+  function applyTheme(name) {
+    document.body.classList.remove('theme-blue', 'theme-green', 'theme-dark');
+    const cls = 'theme-' + name;
+    document.body.classList.add(cls);
+    // mark active button
+    document.querySelectorAll('.btn-theme').forEach(b => b.classList.remove('active'));
+    const active = document.querySelector('.btn-theme[data-theme="' + name + '"]');
+    if (active) active.classList.add('active');
+  }
+
+  // load saved theme
+  const saved = localStorage.getItem('site-theme') || 'blue';
+  applyTheme(saved);
+
+  // theme button listeners
+  document.querySelectorAll('.btn-theme').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const t = btn.getAttribute('data-theme');
+      if (!t) return;
+      applyTheme(t);
+      localStorage.setItem('site-theme', t);
+    });
+  });
 });
