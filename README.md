@@ -1,4 +1,4 @@
-# Employment Management (Auth + Employees)
+# Employment Management
 
 This Flask app provides a simple Employment Management System (EMS) with login/signup and a modern CRUD UI for employees. It uses Bootstrap, Animate.css, and a lightweight SQLite store (`employees.db`).
 
