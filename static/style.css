@@ -1,0 +1,14 @@
+/* Modern UI tweaks */
+body { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
+.card { border-radius: 12px; transition: transform .18s ease, box-shadow .18s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(18, 38, 63, 0.08); }
+.navbar-brand { font-weight: 700; letter-spacing: .2px; }
+
+.employee-row { transition: background .15s ease, transform .12s ease; }
+.employee-row:hover { background: rgba(0,0,0,0.02); transform: translateX(4px); }
+
+.btn-primary { transition: transform .12s ease, box-shadow .12s ease; }
+.btn-primary:hover { transform: translateY(-2px); }
+
+.table-hover tbody tr:hover { background: rgba(99,102,241,0.04); }
+

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Welcome back</h5>
+          <p class="lead">You're signed in as <strong>{{ email }}</strong>.</p>
+          <p class="mb-0">Total employees: <strong>{{ emp_count }}</strong></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Quick actions</h5>
+          <a class="btn btn-outline-primary w-100 mb-2" href="{{ url_for('employees') }}">View employees</a>
+          <a class="btn btn-outline-secondary w-100" href="{{ url_for('logout') }}">Sign out</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Insights</h5>
+          <p class="mb-0">Department breakdown and hiring trends</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6>Employees by Department</h6>
+          <canvas id="deptChart" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6>Employees by Position</h6>
+          <canvas id="posChart" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6>Salary Distribution</h6>
+          <canvas id="salaryChart" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6>Hires (last 12 months)</h6>
+          <canvas id="hiresChart" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data from server
+    const deptLabels = {{ dept_labels|tojson }};
+    const deptValues = {{ dept_values|tojson }};
+    const posLabels = {{ pos_labels|tojson }};
+    const posValues = {{ pos_values|tojson }};
+    const salaryLabels = {{ salary_labels|tojson }};
+    const salaryValues = {{ salary_values|tojson }};
+    const months = {{ months|tojson }};
+    const hiresValues = {{ hires_values|tojson }};
+
+    function chartColors(n) {
+      const base = ['#007bff','#28a745','#ffc107','#dc3545','#17a2b8','#6f42c1','#fd7e14','#20c997','#6610f2','#e83e8c'];
+      const out = [];
+      for (let i=0;i<n;i++) out.push(base[i % base.length]);
+      return out;
+    }
+
+    // Dept pie
+    new Chart(document.getElementById('deptChart').getContext('2d'), {
+      type: 'pie',
+      data: {
+        labels: deptLabels,
+        datasets: [{ data: deptValues, backgroundColor: chartColors(deptValues.length) }]
+      },
+      options: { responsive: true }
+    });
+
+    // Position bar
+    new Chart(document.getElementById('posChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: posLabels,
+        datasets: [{ label: 'Employees', data: posValues, backgroundColor: chartColors(posValues.length) }]
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    // Salary doughnut
+    new Chart(document.getElementById('salaryChart').getContext('2d'), {
+      type: 'doughnut',
+      data: { labels: salaryLabels, datasets: [{ data: salaryValues, backgroundColor: chartColors(salaryValues.length) }] },
+      options: { responsive: true }
+    });
+
+    // Hires line
+    new Chart(document.getElementById('hiresChart').getContext('2d'), {
+      type: 'line',
+      data: { labels: months, datasets: [{ label: 'Hires', data: hiresValues, borderColor: '#007bff', backgroundColor: 'rgba(0,123,255,0.1)', fill: true }] },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+  </script>
+{% endblock %}
